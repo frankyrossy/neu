@@ -24,12 +24,14 @@ interface BookingDetails {
 interface BookingConfirmationProps {
   open?: boolean;
   onClose?: () => void;
+  onOpenChange?: (open: boolean) => void;
   bookingDetails?: BookingDetails;
 }
 
 const BookingConfirmation = ({
   open = true,
   onClose = () => {},
+  onOpenChange = () => {},
   bookingDetails = {
     confirmationNumber: "KT-" + Math.floor(100000 + Math.random() * 900000),
     patientName: "Max Mustermann",
@@ -41,7 +43,7 @@ const BookingConfirmation = ({
   },
 }: BookingConfirmationProps) => {
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] bg-white">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center text-green-600 flex items-center justify-center gap-2">
@@ -138,9 +140,15 @@ const BookingConfirmation = ({
           </div>
         </div>
 
-        <DialogFooter className="flex flex-col sm:flex-row sm:justify-center gap-2">
-          <Button onClick={onClose} className="w-full sm:w-auto">
-            Zurück zum Kalender
+        <DialogFooter className="flex justify-center">
+          <Button
+            onClick={() => {
+              onClose();
+              onOpenChange(false);
+            }}
+            className="w-full sm:w-auto"
+          >
+            Zurück zur Startseite
           </Button>
         </DialogFooter>
       </DialogContent>

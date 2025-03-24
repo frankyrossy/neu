@@ -108,7 +108,7 @@ const Home = ({ className }: HomeProps) => {
   return (
     <div className={cn("min-h-screen bg-white", className)}>
       <Header />
-      <main className="container max-w-6xl py-[80] py-[900] flex top-[90] right-0 bottom-0 relative top-[90px] justify-end items-center flex-col">
+      <main className="container max-w-6xl py-20 relative top-[90px] flex justify-end items-center flex-col">
         <div className="text-center mb-8 py-2.5">
           <h1 className="text-3xl font-bold mb-2">
             Krankentransport Terminbuchung
@@ -119,9 +119,9 @@ const Home = ({ className }: HomeProps) => {
           </p>
         </div>
 
-        <div className="md:grid-cols-2 flex justify-center items-start gap-[40px] w-[878.1875px]">
+        <div className="md:grid-cols-2 flex justify-center items-start gap-10 w-full max-w-[880px]">
           {/* Date Selection */}
-          <div className="bg-white rounded-lg shadow-sm py-[6] py-[6] px-5 w-[278.5px]">
+          <div className="bg-white rounded-lg shadow-sm p-5 w-[280px]">
             <h2 className="text-xl font-semibold mb-4">Datum auswählen</h2>
 
             <div className="flex justify-between items-center mb-4">
@@ -228,7 +228,7 @@ const Home = ({ className }: HomeProps) => {
           </div>
 
           {/* Time Slot Selection */}
-          <div className="bg-white rounded-lg shadow-sm pl-[6] py-[6] pl-[6] py-[6] pl-[6] pr-[25px.625rem] py-[6] pl-[6] py-[6] py-[6] w-[521.5px]">
+          <div className="bg-white rounded-lg shadow-sm p-6 w-[520px]">
             <h2 className="text-xl font-semibold mb-4">
               Uhrzeit auswählen für{" "}
               {format(selectedDate, "dd.MM.yyyy", { locale: de })}
@@ -248,6 +248,9 @@ const Home = ({ className }: HomeProps) => {
                       isAvailable
                         ? "border-gray-200 hover:border-blue-500 hover:bg-blue-50"
                         : "border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed",
+                      selectedSlot &&
+                        selectedSlot.getTime() === time.getTime() &&
+                        "border-blue-500 bg-blue-100 text-blue-700"
                     )}
                   >
                     {formatTimeSlot(time)}
@@ -258,19 +261,24 @@ const Home = ({ className }: HomeProps) => {
           </div>
         </div>
       </main>
+
       {/* Booking Form Dialog */}
-      <BookingForm
-        open={showBookingForm}
-        onOpenChange={setShowBookingForm}
-        selectedSlot={selectedSlot}
-        onSubmit={handleFormSubmit}
-      />
+      {showBookingForm && selectedSlot && (
+        <BookingForm
+          open={showBookingForm}
+          onOpenChange={setShowBookingForm}
+          selectedSlot={selectedSlot}
+          onSubmit={handleFormSubmit}
+        />
+      )}
+
       {/* Booking Confirmation Dialog */}
-      {bookingDetails && (
+      {showConfirmation && bookingDetails && (
         <BookingConfirmation
           open={showConfirmation}
-          onClose={handleConfirmationClose}
+          onOpenChange={setShowConfirmation}
           bookingDetails={bookingDetails}
+          onClose={handleConfirmationClose}
         />
       )}
     </div>
