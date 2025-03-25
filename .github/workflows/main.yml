@@ -1,0 +1,21 @@
+name: Firebase Deploy
+on:
+  push:
+    branches:
+      - main  # Oder dein Standard-Branch
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Oder deine bevorzugte Node.js-Version
+      - run: npm ci  # Oder yarn install, wenn du Yarn verwendest
+      - run: npm run build  # Oder dein Build-Befehl
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_FAHRDIENST_RICHTER }}'
+          channelId: live
+          projectId: fahrdienst-richter
